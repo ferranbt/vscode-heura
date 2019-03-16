@@ -1,0 +1,449 @@
+{
+	"scopeName": "source.heura",
+	"comment": "Heura",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"comment": "Interpreted string literals",
+			"begin": "\"",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.begin.heura"
+				}
+			},
+			"end": "\"",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.end.heura"
+				}
+			},
+			"name": "string.quoted.double.heura",
+			"patterns": [
+				{
+					"include": "#string_escaped_char"
+				},
+				{
+					"include": "#string_placeholder"
+				}
+			]
+		},
+		{
+			"comment": "Syntax error using slices",
+			"match": "\\[\\](\\s+)",
+			"captures": {
+				"1": {
+					"name": "invalid.illegal.slice.heura"
+				}
+			}
+		},
+		{
+			"comment": "Syntax error numeric literals",
+			"match": "\\b0[0-7]*[89]\\d*\\b",
+			"name": "invalid.illegal.numeric.heura"
+		},
+		{
+			"comment": "Built-in functions",
+			"match": "\\b(print|len|first|last|rest|push|print|Account)\\b(?=\\()",
+			"name": "support.function.builtin.heura"
+		},
+		{
+			"comment": "Function declarations",
+			"match": "^(\\bfn\\b)(?:\\s+(\\([^\\)]+\\)\\s+)?(\\w+)(?=\\())?",
+			"captures": {
+				"1": {
+					"name": "keyword.function.heura"
+				},
+				"2": {
+					"patterns": [
+						{
+							"include": "#brackets"
+						},
+						{
+							"include": "#operators"
+						}
+					]
+				},
+				"3": {
+					"patterns": [
+						{
+							"match": "\\d\\w*",
+							"name": "invalid.illegal.identifier.heura"
+						},
+						{
+							"match": "\\w+",
+							"name": "entity.name.function.heura"
+						}
+					]
+				}
+			}
+		},
+		{
+			"comment": "Functions",
+			"match": "(\\bfn\\b)|(\\w+)(?=\\()",
+			"captures": {
+				"1": {
+					"name": "keyword.function.go"
+				},
+				"2": {
+					"patterns": [
+						{
+							"match": "\\d\\w*",
+							"name": "invalid.illegal.identifier.go"
+						},
+						{
+							"match": "\\w+",
+							"name": "support.function.go"
+						}
+					]
+				}
+			}
+		},
+		{
+			"comment": "This",
+			"match": "\\b(this)\\b",
+			"name": "keyword.this.heura"
+		},
+		{
+			"comment": "Hex numbers",
+			"match": "\\b(0x[0-9A-Fa-f]+)([kKmMgG]b?)?\\b",
+			"name": "constant.numeric.heura"
+		},
+		{
+			"comment": "Integers",
+			"match": "\\b((0x[0-9a-fA-F]+)|(0[0-7]+i?)|(\\d+([Ee]\\d+)?i?)|(\\d+[Ee][-+]\\d+i?))\\b",
+			"name": "constant.numeric.integer.heura"
+		},
+		{
+			"comment": "Language constants",
+			"match": "\\b(true|false)\\b",
+			"name": "constant.language.heura"
+		},
+		{
+			"begin": "\\b(artifact)\\s+",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.artifact.heura"
+				}
+			},
+			"end": "(?!\\G)",
+			"patterns": [
+				{
+					"include": "#imports"
+				}
+			]
+		},
+		{
+			"match": "\\w+(?:,\\s*\\w+)*(?=\\s*:=)",
+			"captures": {
+				"0": {
+					"patterns": [
+						{
+							"match": "\\d\\w*",
+							"name": "invalid.illegal.identifier.heura"
+						},
+						{
+							"match": "\\w+",
+							"name": "variable.other.assignment.heura"
+						},
+						{
+							"include": "#delimiters"
+						}
+					]
+				}
+			}
+		},
+		{
+			"comment": "Terminators",
+			"match": ";",
+			"name": "punctuation.terminator.heura"
+		},
+		{
+			"include": "#brackets"
+		},
+		{
+			"include": "#delimiters"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#operators"
+		},
+		{
+			"include": "#runes"
+		},
+		{
+			"include": "#storage_types"
+		}
+	],
+	"repository": {
+		"brackets": {
+			"patterns": [
+				{
+					"begin": "{",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.begin.bracket.curly.heura"
+						}
+					},
+					"end": "}",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.end.bracket.curly.heura"
+						}
+					},
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				},
+				{
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.begin.bracket.round.heura"
+						}
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.end.bracket.round.heura"
+						}
+					},
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				},
+				{
+					"match": "\\[|\\]",
+					"name": "punctuation.definition.bracket.square.heura"
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"begin": "/\\*",
+					"end": "\\*/",
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.comment.heura"
+						}
+					},
+					"name": "comment.block.heura"
+				},
+				{
+					"begin": "//",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.heura"
+						}
+					},
+					"end": "$",
+					"name": "comment.line.double-slash.heura"
+				}
+			]
+		},
+		"delimiters": {
+			"patterns": [
+				{
+					"match": ",",
+					"name": "punctuation.other.comma.heura"
+				},
+				{
+					"match": "\\.(?!\\.\\.)",
+					"name": "punctuation.other.period.heura"
+				},
+				{
+					"match": ":(?!=)",
+					"name": "punctuation.other.colon.heura"
+				}
+			]
+		},
+		"imports": {
+			"patterns": [
+				{
+					"match": "((?!\\s+\")[^\\s]*)?\\s*((\")([^\"]*)(\"))",
+					"captures": {
+						"1": {
+							"name": "entity.alias.import.heura"
+						},
+						"2": {
+							"name": "string.quoted.double.heura"
+						},
+						"3": {
+							"name": "punctuation.definition.string.begin.heura"
+						},
+						"4": {
+							"name": "entity.name.import.heura"
+						},
+						"5": {
+							"name": "punctuation.definition.string.end.heura"
+						}
+					}
+				},
+				{
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.imports.begin.bracket.round.heura"
+						}
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.imports.end.bracket.round.heura"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#imports"
+						}
+					]
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"comment": "Flow control keywords",
+					"match": "\\b(if|else|return)\\b",
+					"name": "keyword.control.heura"
+				},
+				{
+					"match": "\\blet\\b",
+					"name": "keyword.const.heura"
+				},
+				{
+					"match": "\\bfn\\b",
+					"name": "keyword.function.heura"
+				}
+			]
+		},
+		"operators": {
+			"comment": "Note that the order here is very important!",
+			"patterns": [
+				{
+					"match": "(==|!=|<|>)",
+					"name": "keyword.operator.comparison.heura"
+				},
+				{
+					"match": "(=)",
+					"name": "keyword.operator.assignment.heura"
+				},
+				{
+					"match": "(\\+|\\-|\\*|/|%)",
+					"name": "keyword.operator.arithmetic.heura"
+				}
+			]
+		},
+		"string_escaped_char": {
+			"patterns": [
+				{
+					"match": "\\\\([0-7]{3}|[abfnrtv\\\\'\"]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})",
+					"name": "constant.character.escape.heura"
+				},
+				{
+					"match": "\\\\[^0-7xuUabfnrtv\\'\"]",
+					"name": "invalid.illegal.unknown-escape.heura"
+				}
+			]
+		},
+		"string_placeholder": {
+			"patterns": [
+				{
+					"match": "%(\\[\\d+\\])?([\\+#\\-0\\x20]{,2}((\\d+|\\*)?(\\.?(\\d+|\\*|(\\[\\d+\\])\\*?)?(\\[\\d+\\])?)?))?[vT%tbcdoqxXUbeEfFgGsp]",
+					"name": "constant.other.placeholder.heura"
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"match": "(\\w+(?:,\\s*\\w+)*)(\\s+\\*?\\w+(?:\\.\\w+)?\\s*)?(?=\\s*=)",
+					"captures": {
+						"1": {
+							"patterns": [
+								{
+									"match": "\\d\\w*",
+									"name": "invalid.illegal.identifier.heura"
+								},
+								{
+									"match": "\\w+",
+									"name": "variable.other.assignment.heura"
+								},
+								{
+									"include": "#delimiters"
+								}
+							]
+						},
+						"2": {
+							"patterns": [
+								{
+									"include": "$self"
+								}
+							]
+						}
+					}
+				},
+				{
+					"match": "(\\w+(?:,\\s*\\w+)*)(\\s+(\\[(\\d*|\\.\\.\\.)\\])*\\*?(<-)?\\w+(?:\\.\\w+)?\\s*[^=].*)",
+					"captures": {
+						"1": {
+							"patterns": [
+								{
+									"match": "\\d\\w*",
+									"name": "invalid.illegal.identifier.heura"
+								},
+								{
+									"match": "\\w+",
+									"name": "variable.other.declaration.heura"
+								},
+								{
+									"include": "#delimiters"
+								}
+							]
+						},
+						"2": {
+							"patterns": [
+								{
+									"include": "$self"
+								}
+							]
+						}
+					}
+				},
+				{
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.variables.begin.bracket.round.heura"
+						}
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.variables.end.bracket.round.heura"
+						}
+					},
+					"patterns": [
+						{
+							"include": "$self"
+						},
+						{
+							"include": "#variables"
+						}
+					]
+				}
+			]
+		}
+	}
+}
